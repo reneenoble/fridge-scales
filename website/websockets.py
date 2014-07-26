@@ -2,6 +2,7 @@ import datetime
 import tornado
 from tornado import websocket
 from tornado import httpserver
+import serial
 
 class WSHandler(websocket.WebSocketHandler):
     def open(self):
@@ -19,7 +20,9 @@ class WSHandler(websocket.WebSocketHandler):
       return True
     
     def test(self):
-        self.write_message("scheduled!")
+        line = ser.readline()
+        if line:
+            self.write_message(line)
         tornado.ioloop.IOLoop.instance().add_timeout(datetime.timedelta(seconds=5), self.test)
 
       
@@ -29,6 +32,7 @@ application = tornado.web.Application([
  
  
 if __name__ == "__main__":
+    ser = serial.Serial('COM3', 9600, timeout=0)
     http_server = httpserver.HTTPServer(application)
     http_server.listen(8883)
     tornado.ioloop.IOLoop.instance().start()
