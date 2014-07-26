@@ -34,6 +34,6 @@ application = tornado.web.Application([
 if __name__ == "__main__":
     ser = serial.Serial('COM3', 9600, timeout=0)
     http_server = httpserver.HTTPServer(application)
-    http_server.listen(8883)
+    http_server.listen(8888)
     tornado.ioloop.IOLoop.instance().start()
  
