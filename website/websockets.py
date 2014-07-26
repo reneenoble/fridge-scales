@@ -8,7 +8,7 @@ class WSHandler(websocket.WebSocketHandler):
     def open(self):
         print 'new connection'
         self.write_message("Goodbye World")
-        tornado.ioloop.IOLoop.instance().add_timeout(datetime.timedelta(seconds=5), self.test)
+        self.test()
       
     def on_message(self, message):
         print 'message received %s' % message
@@ -23,7 +23,7 @@ class WSHandler(websocket.WebSocketHandler):
         line = ser.readline()
         if line:
             self.write_message(line)
-        tornado.ioloop.IOLoop.instance().add_timeout(datetime.timedelta(seconds=5), self.test)
+        tornado.ioloop.IOLoop.instance().add_timeout(datetime.timedelta(seconds=0.5), self.test)
 
       
 application = tornado.web.Application([
