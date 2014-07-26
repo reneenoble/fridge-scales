@@ -29,6 +29,15 @@
         9: "yellowgreen",
       };
       
+      function createShuffle(timeChange) {
+        return setInterval(function() {
+          var keys = $.map(colors, function(element,index) {return index});
+          var key = keys[randomIndex(keys.length)];
+          color = colors[key];
+          $("html").css("background", color);
+        }, timeChange);
+      }
+      
       $(document).ready(function () {
         var host = "localhost";
         var port = "8888";
@@ -37,18 +46,25 @@
         var ws = new WebSocket("ws://" + host + ":" + port + uri);
  
         var shuffle;
+        var timeChange = 1000;
         ws.onmessage = function(evt) {
           var message = evt.data.replace(/\r\n/g, "");
           $("#message").html(message);
           
           var color;
-          if (message == "Shuffle") {
-            shuffle = setInterval(function() {
-              var keys = $.map(colors, function(element,index) {return index});
-              var key = keys[randomIndex(keys.length)];
-              color = colors[key];
-              $("html").css("background", color);
-            }, 1000);
+          if (message == "Minus") {
+            timeChange += 200;
+            clearInterval(shuffle);
+            shuffle = createShuffle(timeChange);
+          }
+          else if (message == "Plus") {
+            timeChange -= 200;
+            clearInterval(shuffle);
+            shuffle = createShuffle(timeChange);
+          }
+          else if (message == "Shuffle") {
+            clearInterval(shuffle);
+            shuffle = createShuffle(timeChange);
           } else {
             color = colors[message];
             $("html").css("background", color);
