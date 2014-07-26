@@ -24,7 +24,9 @@
  
           ws = new WebSocket("ws://" + host + ":" + port + uri);
  
-          ws.onmessage = function(evt) {alert("message received: " + evt.data)};
+          ws.onmessage = function(evt) {
+			$("#message").html(evt.data);
+		  };
  
           ws.onclose = function(evt) { alert("Connection close"); };
  
@@ -50,5 +52,6 @@
       <input type="text" id="uri" value="/ws" style="background:#ff0000;"/><br />
       <input type="submit" id="open" value="open" />
     </div>
+	<h2 id="message"></h2>
   </body>
 </html>
