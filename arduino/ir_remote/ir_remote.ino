@@ -8,6 +8,8 @@
 
 #include <IRremote.h>
 
+#define POWER_BUT            0xFFA25D
+
 int RECV_PIN = 11;
 int led = 8;
 int on_off = 0;
@@ -25,8 +27,12 @@ void setup()
 
 void loop() {
   if (irrecv.decode(&results)) {
-    Serial.println(results.value, HEX);
-    irrecv.resume(); // Receive the next value
+    // log message
+    if(results == POWER_BUT) {
+      Serial.println("Power!");
+    }
+    
+    // toggle LED
     if (results.value) {
       on_off = !on_off;
       if(on_off == 1) {
@@ -35,5 +41,7 @@ void loop() {
         digitalWrite(led, LOW);
       }
     }
+    
+    irrecv.resume(); // Receive the next value
   }
 }
